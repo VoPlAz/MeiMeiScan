@@ -3,11 +3,19 @@ import requests
 import random
 import sys
 
+'''
+1.0.1:
+[+]修复自定义地址列表范围错误
+[+]MeiMei列表添加一条地址
+[+]添加指令报错
+[+]添加退出程序'exit'指令
+'''
 Path_y = sys.path[0]
-Path=Path_y+'\\'
+Path = Path_y + '\\'
 mode = 'MeiMei'
 pictures_n = 0
-Meimei_url_list = ['https://www.dmoe.cc/random.php',
+sho = 'Y'
+Meimei_url_list = ['https://www.dmoe.cc/random.php', 'https://api.ghser.com/random/api.php',
                    'https://api.ixiaowai.cn/api/api.php', 'http://api.btstu.cn/sjbz/api.php?lx=dongman&format=images']
 FengJing_url_list = ['https://api.dujin.org/pic/fengjing', 'http://api.btstu.cn/sjbz/api.php?lx=fengjing&format=images']
 
@@ -23,7 +31,7 @@ def header():
     print('[+]有许多内置的API地址，可以自定义添加')
     print('[+]支持自定义爬取数量')
     print('[+]让你有更多的壁纸素材')
-    print('-------------------------------------------------------------Version [1.0.0]')
+    print('-------------------------------------------------------------Version [1.0.1]')
     print("Type 'help' for usage")
 
 
@@ -33,6 +41,7 @@ def help():
     print("add [address]")  # 添加地址
     print('path [save path]')  # 保存地址
     print("options")  # 查看设置
+    print('exit')  # 退出程序
     print("start")  # 开始
     print('--------------------')
     print('''Mode:(1)MeiMei(2)Scenery(3)Custom''')
@@ -40,7 +49,7 @@ def help():
 
 header()
 count = 0
-count_2=1
+count_2 = 1
 User_url_count = 0
 
 
@@ -50,74 +59,115 @@ def options(mode, numberofpic, path):
     print('Path:' + path)
 
 
+def e_back():
+    print('没有设置参数')
+
+
+def error(CC):
+    if CC.lower() == 'number':
+        e_back()
+        sho = 'N'
+    if CC.lower() == 'type':
+        e_back()
+        sho = 'N'
+    if CC.lower() == 'add':
+        e_back()
+        sho = 'N'
+    if CC.lower() == 'path':
+        e_back()
+        sho = 'N'
+
+
 while True:
     User_c = input(">>>")
-    if User_c.lower() == 'help':
-        help()
-    elif User_c[0:6].lower() == 'number' and User_c[6] == ' ':
-        pictures_n = int(User_c[7:])
-        print('Number Of Pictures -----> ' + User_c[7:])
-    elif User_c[0:4].lower() == 'type' and User_c[4] == ' ':
-        if User_c[5:] == '1':
-            mode = 'MeiMei'
-            print('Mode -----> ' + mode)
-        elif User_c[5:] == '2':
-            mode = 'Scenery'
-            print('Mode -----> ' + mode)
-        elif User_c[5:] == '3':
-            mode = 'Custom'
-            print('Mode -----> ' + mode)
-        else:
-            print("No '" + User_c[5:] + "' type")
-    elif User_c[0:3].lower() == 'add' and User_c[3] == ' ':
-        User_url_list.append(User_c[4:])
-        print('Add ' + User_c[4:])
-    elif User_c[0:4].lower() == 'path' and User_c[4] == ' ':
-        if User_c[-1]=='\\':
-            Path = User_c[5:]
-            print('Path -----> '+Path)
-        if User_c[-1]!='\\':
-            Path =User_c[5:]+'\\'
-            print('Path -----> ' + Path)
-    elif User_c[0:7].lower() == 'options':
-        options(mode=mode, numberofpic=pictures_n, path=Path)
-    elif User_c[0:5].lower() == 'start':
-        if mode == 'MeiMei':
-            while True:
-                if count == pictures_n:
-                    break
-                print('下载第' + str(count_2) + '张至' + Path)
-                img = requests.get(Meimei_url_list[random.randint(0, 2)])
-                with open(Path + str(count_2) + '.jpg', 'wb') as f:
-                    f.write(img.content)
-                    f.close()
-                count_2 += 1
-                count+=1
-        if mode == 'Scenery':
-            while True:
-                if count == pictures_n:
-                    break
-                print('下载第' + str(count_2) + '张至' + Path)
-                img = requests.get(FengJing_url_list[random.randint(0, 1)])
-                with open(Path + str(count_2) + '.jpg', 'wb') as f:
-                    f.write(img.content)
-                    f.close()
-                count_2 += 1
-                count+=1
-        if mode == 'Custom':
-            while True:
+    if User_c.lower() == 'number':
+        e_back()
+        sho = 'N'
+    if User_c.lower() == 'type':
+        e_back()
+        sho = 'N'
+    if User_c.lower() == 'add':
+        e_back()
+        sho = 'N'
+    if User_c.lower() == 'path':
+        e_back()
+        sho = 'N'
+    if sho != 'N':
+        if User_c.lower() == 'help':
+            help()
+        elif User_c[0:6].lower() == 'number' and User_c[6] == ' ':
+            pictures_n = int(User_c[7:])
+            print('Number Of Pictures -----> ' + User_c[7:])
+        elif User_c[0:4].lower() == 'type' and User_c[4] == ' ':
+            if User_c[5:] == '1':
+                mode = 'MeiMei'
+                print('Mode -----> ' + mode)
+            elif User_c[5:] == '2':
+                mode = 'Scenery'
+                print('Mode -----> ' + mode)
+            elif User_c[5:] == '3':
+                mode = 'Custom'
+                print('Mode -----> ' + mode)
+            else:
+                print("No '" + User_c[5:] + "' type")
+        elif User_c[0:3].lower() == 'add' and User_c[3] == ' ':
+            User_url_list.append(User_c[4:])
+            print('Add ' + User_c[4:])
+        elif User_c[0:4].lower() == 'path' and User_c[4] == ' ':
+            if User_c[-1] == '\\':
+                Path = User_c[5:]
+                print('Path -----> ' + Path)
+            if User_c[-1] != '\\':
+                Path = User_c[5:] + '\\'
+                print('Path -----> ' + Path)
+        elif User_c[0:7].lower() == 'options':
+            options(mode=mode, numberofpic=pictures_n, path=Path)
+        elif User_c[0:4].lower() == 'exit':
+            exit()
+        elif User_c[0:5].lower() == 'start':
+            if mode == 'MeiMei':
+                while True:
+                    if count == pictures_n:
+                        break
+                    print('下载第' + str(count_2) + '张至' + Path)
+                    img = requests.get(Meimei_url_list[random.randint(0, 2)])
+                    with open(Path + str(count_2) + '.jpg', 'wb') as f:
+                        f.write(img.content)
+                        f.close()
+                    count_2 += 1
+                    count += 1
+            if mode == 'Scenery':
+                while True:
+                    if count == pictures_n:
+                        break
+                    print('下载第' + str(count_2) + '张至' + Path)
+                    img = requests.get(FengJing_url_list[random.randint(0, 1)])
+                    with open(Path + str(count_2) + '.jpg', 'wb') as f:
+                        f.write(img.content)
+                        f.close()
+                    count_2 += 1
+                    count += 1
+            if mode == 'Custom':
                 for a in User_url_list:
                     User_url_count += 1
-                if count == pictures_n:
-                    break
-                print('下载第' + str(count_2) + '张至' + Path)
-                img = requests.get(User_url_list[random.randint(0, User_url_count)])
-                with open(Path + str(count_2) + '.jpg', 'wb') as f:
-                    f.write(img.content)
-                    f.close()
-                count_2 += 1
-                count+=1
-        count = 0
-        count_2=1
-    else:
-        print("No command for " + User_c)
+                while True:
+                    if count == pictures_n:
+                        break
+                    if User_url_list == []:
+                        print('无自定义地址')
+                        break
+                    print('下载第' + str(count_2) + '张至' + Path)
+                    if User_url_count == 1:
+                        img = requests.get(User_url_list[0])
+                    else:
+                        img = requests.get(User_url_list[random.randint(0, User_url_count)])
+                    with open(Path + str(count_2) + '.jpg', 'wb') as f:
+                        f.write(img.content)
+                        f.close()
+                    count_2 += 1
+                    count += 1
+            count = 0
+            count_2 = 1
+        else:
+            print("No command for " + User_c)
+    sho='Y'
